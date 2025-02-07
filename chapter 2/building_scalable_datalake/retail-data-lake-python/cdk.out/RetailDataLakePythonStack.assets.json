@@ -1,0 +1,19 @@
+{
+  "version": "34.0.0",
+  "files": {
+    "a21f2a286488a82ff293ef061bbe04acd69924107c3402eb8d0015efbe7ac462": {
+      "source": {
+        "path": "RetailDataLakePythonStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "a21f2a286488a82ff293ef061bbe04acd69924107c3402eb8d0015efbe7ac462.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

@@ -1,0 +1,573 @@
+{
+ "Resources": {
+  "RetailDataLakeDB": {
+   "Type": "AWS::Glue::Database",
+   "Properties": {
+    "CatalogId": {
+     "Ref": "AWS::AccountId"
+    },
+    "DatabaseInput": {
+     "Description": "Retail data lake catalog database",
+     "Name": "retail_analytics"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeCatalog/RetailDataLakeDB"
+   }
+  },
+  "GlueCrawlerRole4AA4B387": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "glue.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSGlueServiceRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeCatalog/GlueCrawlerRole/Resource"
+   }
+  },
+  "GlueCrawlerRoleDefaultPolicy44958AC9": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttCuratedZone89FD8C71ArnC6F8D1E3"
+        },
+        {
+         "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttRawZone2D660746ArnD67825B6"
+        },
+        {
+         "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttTrustedZone45D5B023ArnBBF2646C"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttCuratedZone89FD8C71ArnC6F8D1E3"
+           },
+           "/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttRawZone2D660746ArnD67825B6"
+           },
+           "/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttTrustedZone45D5B023ArnBBF2646C"
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttDataLakeKey37130A3EArn565CC05E"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "GlueCrawlerRoleDefaultPolicy44958AC9",
+    "Roles": [
+     {
+      "Ref": "GlueCrawlerRole4AA4B387"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeCatalog/GlueCrawlerRole/DefaultPolicy/Resource"
+   }
+  },
+  "RawZoneCrawler": {
+   "Type": "AWS::Glue::Crawler",
+   "Properties": {
+    "DatabaseName": {
+     "Ref": "RetailDataLakeDB"
+    },
+    "Name": "raw-zone-crawler",
+    "Role": {
+     "Fn::GetAtt": [
+      "GlueCrawlerRole4AA4B387",
+      "Arn"
+     ]
+    },
+    "Schedule": {
+     "ScheduleExpression": "cron(0 0/6 * * ? *)"
+    },
+    "SchemaChangePolicy": {
+     "DeleteBehavior": "LOG",
+     "UpdateBehavior": "UPDATE_IN_DATABASE"
+    },
+    "Targets": {
+     "S3Targets": [
+      {
+       "Path": {
+        "Fn::Join": [
+         "",
+         [
+          "s3://",
+          {
+           "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefRawZone2D660746DB53C4C1"
+          },
+          "/transactions/"
+         ]
+        ]
+       }
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeCatalog/RawZoneCrawler"
+   }
+  },
+  "TrustedZoneCrawler": {
+   "Type": "AWS::Glue::Crawler",
+   "Properties": {
+    "DatabaseName": {
+     "Ref": "RetailDataLakeDB"
+    },
+    "Name": "trusted-zone-crawler",
+    "Role": {
+     "Fn::GetAtt": [
+      "GlueCrawlerRole4AA4B387",
+      "Arn"
+     ]
+    },
+    "Schedule": {
+     "ScheduleExpression": "cron(0 0/6 * * ? *)"
+    },
+    "SchemaChangePolicy": {
+     "DeleteBehavior": "LOG",
+     "UpdateBehavior": "UPDATE_IN_DATABASE"
+    },
+    "Targets": {
+     "S3Targets": [
+      {
+       "Path": {
+        "Fn::Join": [
+         "",
+         [
+          "s3://",
+          {
+           "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefTrustedZone45D5B0230D67C919"
+          },
+          "/transactions/"
+         ]
+        ]
+       }
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeCatalog/TrustedZoneCrawler"
+   }
+  },
+  "CuratedZoneCrawler": {
+   "Type": "AWS::Glue::Crawler",
+   "Properties": {
+    "DatabaseName": {
+     "Ref": "RetailDataLakeDB"
+    },
+    "Name": "curated-zone-crawler",
+    "Role": {
+     "Fn::GetAtt": [
+      "GlueCrawlerRole4AA4B387",
+      "Arn"
+     ]
+    },
+    "Schedule": {
+     "ScheduleExpression": "cron(0 0/6 * * ? *)"
+    },
+    "SchemaChangePolicy": {
+     "DeleteBehavior": "LOG",
+     "UpdateBehavior": "UPDATE_IN_DATABASE"
+    },
+    "Targets": {
+     "S3Targets": [
+      {
+       "Path": {
+        "Fn::Join": [
+         "",
+         [
+          "s3://",
+          {
+           "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefCuratedZone89FD8C717D48112F"
+          },
+          "/analytics/"
+         ]
+        ]
+       }
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeCatalog/CuratedZoneCrawler"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02KSw7CIBRF19I5fYoaE8e4gAYXYF4p1WcpJHxCGsLejWXi6Jx7ck/ArxfgHebQq2npDY1QHhHVwjCHZ3mZpKGI2d4x4ohBMzFb4TEb7SsjXKFIZ/a6c3CG1PabzWplUgeXvGqfPxfOThTJ2cqGLb6dPZyBH+HWfQJR75ONtGqQjV9iu0lNqAAAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeCatalog/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

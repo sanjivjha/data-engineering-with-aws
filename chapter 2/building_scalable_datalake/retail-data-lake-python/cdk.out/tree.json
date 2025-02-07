@@ -1,0 +1,1138 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "RetailDataLakeStack": {
+        "id": "RetailDataLakeStack",
+        "path": "RetailDataLakeStack",
+        "children": {
+          "DataLakeKey": {
+            "id": "DataLakeKey",
+            "path": "RetailDataLakeStack/DataLakeKey",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeStack/DataLakeKey/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::KMS::Key",
+                  "aws:cdk:cloudformation:props": {
+                    "enableKeyRotation": true,
+                    "keyPolicy": {
+                      "Statement": [
+                        {
+                          "Action": "kms:*",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "AWS": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "arn:",
+                                  {
+                                    "Ref": "AWS::Partition"
+                                  },
+                                  ":iam::",
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ":root"
+                                ]
+                              ]
+                            }
+                          },
+                          "Resource": "*"
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.CfnKey",
+                  "version": "2.164.1"
+                }
+              },
+              "Alias": {
+                "id": "Alias",
+                "path": "RetailDataLakeStack/DataLakeKey/Alias",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RetailDataLakeStack/DataLakeKey/Alias/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
+                      "aws:cdk:cloudformation:props": {
+                        "aliasName": "alias/retail-data-lake-key",
+                        "targetKeyId": {
+                          "Fn::GetAtt": [
+                            "DataLakeKey37130A3E",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnAlias",
+                      "version": "2.164.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Alias",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_kms.Key",
+              "version": "2.164.1"
+            }
+          },
+          "RawZone": {
+            "id": "RawZone",
+            "path": "RetailDataLakeStack/RawZone",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeStack/RawZone/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "bucketEncryption": {
+                      "serverSideEncryptionConfiguration": [
+                        {
+                          "serverSideEncryptionByDefault": {
+                            "sseAlgorithm": "aws:kms",
+                            "kmsMasterKeyId": {
+                              "Fn::GetAtt": [
+                                "DataLakeKey37130A3E",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "lifecycleConfiguration": {
+                      "rules": [
+                        {
+                          "status": "Enabled",
+                          "transitions": [
+                            {
+                              "storageClass": "INTELLIGENT_TIERING",
+                              "transitionInDays": 90
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "versioningConfiguration": {
+                      "status": "Enabled"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.164.1"
+            }
+          },
+          "TrustedZone": {
+            "id": "TrustedZone",
+            "path": "RetailDataLakeStack/TrustedZone",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeStack/TrustedZone/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "bucketEncryption": {
+                      "serverSideEncryptionConfiguration": [
+                        {
+                          "serverSideEncryptionByDefault": {
+                            "sseAlgorithm": "aws:kms",
+                            "kmsMasterKeyId": {
+                              "Fn::GetAtt": [
+                                "DataLakeKey37130A3E",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "versioningConfiguration": {
+                      "status": "Enabled"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.164.1"
+            }
+          },
+          "CuratedZone": {
+            "id": "CuratedZone",
+            "path": "RetailDataLakeStack/CuratedZone",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeStack/CuratedZone/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "bucketEncryption": {
+                      "serverSideEncryptionConfiguration": [
+                        {
+                          "serverSideEncryptionByDefault": {
+                            "sseAlgorithm": "aws:kms",
+                            "kmsMasterKeyId": {
+                              "Fn::GetAtt": [
+                                "DataLakeKey37130A3E",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "versioningConfiguration": {
+                      "status": "Enabled"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.164.1"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RetailDataLakeStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RetailDataLakeStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.164.1"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "RetailDataLakeStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "RetailDataLakeStack/Exports",
+            "children": {
+              "Output{\"Fn::GetAtt\":[\"RawZone2D660746\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"RawZone2D660746\",\"Arn\"]}",
+                "path": "RetailDataLakeStack/Exports/Output{\"Fn::GetAtt\":[\"RawZone2D660746\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.164.1"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"TrustedZone45D5B023\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"TrustedZone45D5B023\",\"Arn\"]}",
+                "path": "RetailDataLakeStack/Exports/Output{\"Fn::GetAtt\":[\"TrustedZone45D5B023\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.164.1"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"CuratedZone89FD8C71\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"CuratedZone89FD8C71\",\"Arn\"]}",
+                "path": "RetailDataLakeStack/Exports/Output{\"Fn::GetAtt\":[\"CuratedZone89FD8C71\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.164.1"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"DataLakeKey37130A3E\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"DataLakeKey37130A3E\",\"Arn\"]}",
+                "path": "RetailDataLakeStack/Exports/Output{\"Fn::GetAtt\":[\"DataLakeKey37130A3E\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.164.1"
+                }
+              },
+              "Output{\"Ref\":\"RawZone2D660746\"}": {
+                "id": "Output{\"Ref\":\"RawZone2D660746\"}",
+                "path": "RetailDataLakeStack/Exports/Output{\"Ref\":\"RawZone2D660746\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.164.1"
+                }
+              },
+              "Output{\"Ref\":\"TrustedZone45D5B023\"}": {
+                "id": "Output{\"Ref\":\"TrustedZone45D5B023\"}",
+                "path": "RetailDataLakeStack/Exports/Output{\"Ref\":\"TrustedZone45D5B023\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.164.1"
+                }
+              },
+              "Output{\"Ref\":\"CuratedZone89FD8C71\"}": {
+                "id": "Output{\"Ref\":\"CuratedZone89FD8C71\"}",
+                "path": "RetailDataLakeStack/Exports/Output{\"Ref\":\"CuratedZone89FD8C71\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "RetailDataLakeStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.164.1"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "RetailDataLakeStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.164.1"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.164.1"
+        }
+      },
+      "RetailDataLakeCatalog": {
+        "id": "RetailDataLakeCatalog",
+        "path": "RetailDataLakeCatalog",
+        "children": {
+          "RetailDataLakeDB": {
+            "id": "RetailDataLakeDB",
+            "path": "RetailDataLakeCatalog/RetailDataLakeDB",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Glue::Database",
+              "aws:cdk:cloudformation:props": {
+                "catalogId": {
+                  "Ref": "AWS::AccountId"
+                },
+                "databaseInput": {
+                  "description": "Retail data lake catalog database",
+                  "name": "retail_analytics"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_glue.CfnDatabase",
+              "version": "2.164.1"
+            }
+          },
+          "GlueCrawlerRole": {
+            "id": "GlueCrawlerRole",
+            "path": "RetailDataLakeCatalog/GlueCrawlerRole",
+            "children": {
+              "ImportGlueCrawlerRole": {
+                "id": "ImportGlueCrawlerRole",
+                "path": "RetailDataLakeCatalog/GlueCrawlerRole/ImportGlueCrawlerRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.164.1"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeCatalog/GlueCrawlerRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "glue.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AWSGlueServiceRole"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.164.1"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "RetailDataLakeCatalog/GlueCrawlerRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RetailDataLakeCatalog/GlueCrawlerRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "s3:GetBucket*",
+                                "s3:GetObject*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttCuratedZone89FD8C71ArnC6F8D1E3"
+                                },
+                                {
+                                  "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttRawZone2D660746ArnD67825B6"
+                                },
+                                {
+                                  "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttTrustedZone45D5B023ArnBBF2646C"
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttCuratedZone89FD8C71ArnC6F8D1E3"
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttRawZone2D660746ArnD67825B6"
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttTrustedZone45D5B023ArnBBF2646C"
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:DescribeKey"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputFnGetAttDataLakeKey37130A3EArn565CC05E"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "GlueCrawlerRoleDefaultPolicy44958AC9",
+                        "roles": [
+                          {
+                            "Ref": "GlueCrawlerRole4AA4B387"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.164.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.164.1"
+            }
+          },
+          "RawZoneCrawler": {
+            "id": "RawZoneCrawler",
+            "path": "RetailDataLakeCatalog/RawZoneCrawler",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Glue::Crawler",
+              "aws:cdk:cloudformation:props": {
+                "databaseName": {
+                  "Ref": "RetailDataLakeDB"
+                },
+                "name": "raw-zone-crawler",
+                "role": {
+                  "Fn::GetAtt": [
+                    "GlueCrawlerRole4AA4B387",
+                    "Arn"
+                  ]
+                },
+                "schedule": {
+                  "scheduleExpression": "cron(0 0/6 * * ? *)"
+                },
+                "schemaChangePolicy": {
+                  "deleteBehavior": "LOG",
+                  "updateBehavior": "UPDATE_IN_DATABASE"
+                },
+                "targets": {
+                  "s3Targets": [
+                    {
+                      "path": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefRawZone2D660746DB53C4C1"
+                            },
+                            "/transactions/"
+                          ]
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_glue.CfnCrawler",
+              "version": "2.164.1"
+            }
+          },
+          "TrustedZoneCrawler": {
+            "id": "TrustedZoneCrawler",
+            "path": "RetailDataLakeCatalog/TrustedZoneCrawler",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Glue::Crawler",
+              "aws:cdk:cloudformation:props": {
+                "databaseName": {
+                  "Ref": "RetailDataLakeDB"
+                },
+                "name": "trusted-zone-crawler",
+                "role": {
+                  "Fn::GetAtt": [
+                    "GlueCrawlerRole4AA4B387",
+                    "Arn"
+                  ]
+                },
+                "schedule": {
+                  "scheduleExpression": "cron(0 0/6 * * ? *)"
+                },
+                "schemaChangePolicy": {
+                  "deleteBehavior": "LOG",
+                  "updateBehavior": "UPDATE_IN_DATABASE"
+                },
+                "targets": {
+                  "s3Targets": [
+                    {
+                      "path": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefTrustedZone45D5B0230D67C919"
+                            },
+                            "/transactions/"
+                          ]
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_glue.CfnCrawler",
+              "version": "2.164.1"
+            }
+          },
+          "CuratedZoneCrawler": {
+            "id": "CuratedZoneCrawler",
+            "path": "RetailDataLakeCatalog/CuratedZoneCrawler",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Glue::Crawler",
+              "aws:cdk:cloudformation:props": {
+                "databaseName": {
+                  "Ref": "RetailDataLakeDB"
+                },
+                "name": "curated-zone-crawler",
+                "role": {
+                  "Fn::GetAtt": [
+                    "GlueCrawlerRole4AA4B387",
+                    "Arn"
+                  ]
+                },
+                "schedule": {
+                  "scheduleExpression": "cron(0 0/6 * * ? *)"
+                },
+                "schemaChangePolicy": {
+                  "deleteBehavior": "LOG",
+                  "updateBehavior": "UPDATE_IN_DATABASE"
+                },
+                "targets": {
+                  "s3Targets": [
+                    {
+                      "path": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefCuratedZone89FD8C717D48112F"
+                            },
+                            "/analytics/"
+                          ]
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_glue.CfnCrawler",
+              "version": "2.164.1"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RetailDataLakeCatalog/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RetailDataLakeCatalog/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.164.1"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "RetailDataLakeCatalog/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "RetailDataLakeCatalog/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.164.1"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "RetailDataLakeCatalog/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.164.1"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.164.1"
+        }
+      },
+      "RetailDataLakeMonitoring": {
+        "id": "RetailDataLakeMonitoring",
+        "path": "RetailDataLakeMonitoring",
+        "children": {
+          "DataLakeAlerts": {
+            "id": "DataLakeAlerts",
+            "path": "RetailDataLakeMonitoring/DataLakeAlerts",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeMonitoring/DataLakeAlerts/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Topic",
+              "version": "2.164.1"
+            }
+          },
+          "DataLakeDashboard": {
+            "id": "DataLakeDashboard",
+            "path": "RetailDataLakeMonitoring/DataLakeDashboard",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeMonitoring/DataLakeDashboard/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                  "aws:cdk:cloudformation:props": {
+                    "dashboardBody": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{\"widgets\":[{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Raw Zone Metrics\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"metrics\":[[\"AWS/S3\",\"BucketSizeBytes\",\"BucketName\",\"",
+                          {
+                            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefRawZone2D660746DB53C4C1"
+                          },
+                          "\",\"StorageType\",\"StandardStorage\",{\"period\":21600}],[\"AWS/S3\",\"NumberOfObjects\",\"BucketName\",\"",
+                          {
+                            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefRawZone2D660746DB53C4C1"
+                          },
+                          "\",{\"period\":21600}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Trusted Zone Metrics\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"metrics\":[[\"AWS/S3\",\"BucketSizeBytes\",\"BucketName\",\"",
+                          {
+                            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefTrustedZone45D5B0230D67C919"
+                          },
+                          "\",\"StorageType\",\"StandardStorage\",{\"period\":21600}],[\"AWS/S3\",\"NumberOfObjects\",\"BucketName\",\"",
+                          {
+                            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefTrustedZone45D5B0230D67C919"
+                          },
+                          "\",{\"period\":21600}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Curated Zone Metrics\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"metrics\":[[\"AWS/S3\",\"BucketSizeBytes\",\"BucketName\",\"",
+                          {
+                            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefCuratedZone89FD8C717D48112F"
+                          },
+                          "\",\"StorageType\",\"StandardStorage\",{\"period\":21600}],[\"AWS/S3\",\"NumberOfObjects\",\"BucketName\",\"",
+                          {
+                            "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefCuratedZone89FD8C717D48112F"
+                          },
+                          "\",{\"period\":21600}]],\"yAxis\":{}}}]}"
+                        ]
+                      ]
+                    },
+                    "dashboardName": "RetailDataLakeMetrics"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnDashboard",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Dashboard",
+              "version": "2.164.1"
+            }
+          },
+          "RawStorageGrowthAlarm": {
+            "id": "RawStorageGrowthAlarm",
+            "path": "RetailDataLakeMonitoring/RawStorageGrowthAlarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeMonitoring/RawStorageGrowthAlarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmActions": [
+                      {
+                        "Ref": "DataLakeAlerts11FA3F96"
+                      }
+                    ],
+                    "alarmDescription": "Alert when Raw zone storage exceeds 5GB",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "BucketName",
+                        "value": {
+                          "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefRawZone2D660746DB53C4C1"
+                        }
+                      },
+                      {
+                        "name": "StorageType",
+                        "value": "StandardStorage"
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "BucketSizeBytes",
+                    "namespace": "AWS/S3",
+                    "period": 21600,
+                    "statistic": "Average",
+                    "threshold": 5000000000
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.164.1"
+            }
+          },
+          "TrustedStorageGrowthAlarm": {
+            "id": "TrustedStorageGrowthAlarm",
+            "path": "RetailDataLakeMonitoring/TrustedStorageGrowthAlarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeMonitoring/TrustedStorageGrowthAlarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmActions": [
+                      {
+                        "Ref": "DataLakeAlerts11FA3F96"
+                      }
+                    ],
+                    "alarmDescription": "Alert when Trusted zone storage exceeds 5GB",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "BucketName",
+                        "value": {
+                          "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefTrustedZone45D5B0230D67C919"
+                        }
+                      },
+                      {
+                        "name": "StorageType",
+                        "value": "StandardStorage"
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "BucketSizeBytes",
+                    "namespace": "AWS/S3",
+                    "period": 21600,
+                    "statistic": "Average",
+                    "threshold": 5000000000
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.164.1"
+            }
+          },
+          "CuratedStorageGrowthAlarm": {
+            "id": "CuratedStorageGrowthAlarm",
+            "path": "RetailDataLakeMonitoring/CuratedStorageGrowthAlarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeMonitoring/CuratedStorageGrowthAlarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmActions": [
+                      {
+                        "Ref": "DataLakeAlerts11FA3F96"
+                      }
+                    ],
+                    "alarmDescription": "Alert when Curated zone storage exceeds 5GB",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "BucketName",
+                        "value": {
+                          "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefCuratedZone89FD8C717D48112F"
+                        }
+                      },
+                      {
+                        "name": "StorageType",
+                        "value": "StandardStorage"
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "BucketSizeBytes",
+                    "namespace": "AWS/S3",
+                    "period": 21600,
+                    "statistic": "Average",
+                    "threshold": 5000000000
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.164.1"
+            }
+          },
+          "raw-zone-crawler-failure-alarm": {
+            "id": "raw-zone-crawler-failure-alarm",
+            "path": "RetailDataLakeMonitoring/raw-zone-crawler-failure-alarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeMonitoring/raw-zone-crawler-failure-alarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmActions": [
+                      {
+                        "Ref": "DataLakeAlerts11FA3F96"
+                      }
+                    ],
+                    "alarmDescription": "Alert on raw-zone-crawler failures",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "JobName",
+                        "value": "raw-zone-crawler"
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "glue.driver.aggregate.numFailedTasks",
+                    "namespace": "AWS/Glue",
+                    "period": 300,
+                    "statistic": "Average",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.164.1"
+            }
+          },
+          "trusted-zone-crawler-failure-alarm": {
+            "id": "trusted-zone-crawler-failure-alarm",
+            "path": "RetailDataLakeMonitoring/trusted-zone-crawler-failure-alarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeMonitoring/trusted-zone-crawler-failure-alarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmActions": [
+                      {
+                        "Ref": "DataLakeAlerts11FA3F96"
+                      }
+                    ],
+                    "alarmDescription": "Alert on trusted-zone-crawler failures",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "JobName",
+                        "value": "trusted-zone-crawler"
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "glue.driver.aggregate.numFailedTasks",
+                    "namespace": "AWS/Glue",
+                    "period": 300,
+                    "statistic": "Average",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.164.1"
+            }
+          },
+          "curated-zone-crawler-failure-alarm": {
+            "id": "curated-zone-crawler-failure-alarm",
+            "path": "RetailDataLakeMonitoring/curated-zone-crawler-failure-alarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RetailDataLakeMonitoring/curated-zone-crawler-failure-alarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmActions": [
+                      {
+                        "Ref": "DataLakeAlerts11FA3F96"
+                      }
+                    ],
+                    "alarmDescription": "Alert on curated-zone-crawler failures",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "JobName",
+                        "value": "curated-zone-crawler"
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "glue.driver.aggregate.numFailedTasks",
+                    "namespace": "AWS/Glue",
+                    "period": 300,
+                    "statistic": "Average",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.164.1"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RetailDataLakeMonitoring/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RetailDataLakeMonitoring/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.164.1"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "RetailDataLakeMonitoring/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.164.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "RetailDataLakeMonitoring/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.164.1"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "RetailDataLakeMonitoring/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.164.1"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.164.1"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.4.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.164.1"
+    }
+  }
+}

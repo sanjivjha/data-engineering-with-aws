@@ -1,0 +1,553 @@
+{
+ "Resources": {
+  "DataLakeAlerts11FA3F96": {
+   "Type": "AWS::SNS::Topic",
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/DataLakeAlerts/Resource"
+   }
+  },
+  "DataLakeDashboard0CA32ADD": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Raw Zone Metrics\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/S3\",\"BucketSizeBytes\",\"BucketName\",\"",
+       {
+        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefRawZone2D660746DB53C4C1"
+       },
+       "\",\"StorageType\",\"StandardStorage\",{\"period\":21600}],[\"AWS/S3\",\"NumberOfObjects\",\"BucketName\",\"",
+       {
+        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefRawZone2D660746DB53C4C1"
+       },
+       "\",{\"period\":21600}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Trusted Zone Metrics\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/S3\",\"BucketSizeBytes\",\"BucketName\",\"",
+       {
+        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefTrustedZone45D5B0230D67C919"
+       },
+       "\",\"StorageType\",\"StandardStorage\",{\"period\":21600}],[\"AWS/S3\",\"NumberOfObjects\",\"BucketName\",\"",
+       {
+        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefTrustedZone45D5B0230D67C919"
+       },
+       "\",{\"period\":21600}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Curated Zone Metrics\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/S3\",\"BucketSizeBytes\",\"BucketName\",\"",
+       {
+        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefCuratedZone89FD8C717D48112F"
+       },
+       "\",\"StorageType\",\"StandardStorage\",{\"period\":21600}],[\"AWS/S3\",\"NumberOfObjects\",\"BucketName\",\"",
+       {
+        "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefCuratedZone89FD8C717D48112F"
+       },
+       "\",{\"period\":21600}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    },
+    "DashboardName": "RetailDataLakeMetrics"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/DataLakeDashboard/Resource"
+   }
+  },
+  "RawStorageGrowthAlarm847DEC72": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "DataLakeAlerts11FA3F96"
+     }
+    ],
+    "AlarmDescription": "Alert when Raw zone storage exceeds 5GB",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "BucketName",
+      "Value": {
+       "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefRawZone2D660746DB53C4C1"
+      }
+     },
+     {
+      "Name": "StorageType",
+      "Value": "StandardStorage"
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "BucketSizeBytes",
+    "Namespace": "AWS/S3",
+    "Period": 21600,
+    "Statistic": "Average",
+    "Threshold": 5000000000
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/RawStorageGrowthAlarm/Resource"
+   }
+  },
+  "TrustedStorageGrowthAlarm612C19EE": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "DataLakeAlerts11FA3F96"
+     }
+    ],
+    "AlarmDescription": "Alert when Trusted zone storage exceeds 5GB",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "BucketName",
+      "Value": {
+       "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefTrustedZone45D5B0230D67C919"
+      }
+     },
+     {
+      "Name": "StorageType",
+      "Value": "StandardStorage"
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "BucketSizeBytes",
+    "Namespace": "AWS/S3",
+    "Period": 21600,
+    "Statistic": "Average",
+    "Threshold": 5000000000
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/TrustedStorageGrowthAlarm/Resource"
+   }
+  },
+  "CuratedStorageGrowthAlarm43C5B8B8": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "DataLakeAlerts11FA3F96"
+     }
+    ],
+    "AlarmDescription": "Alert when Curated zone storage exceeds 5GB",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "BucketName",
+      "Value": {
+       "Fn::ImportValue": "RetailDataLakeStack:ExportsOutputRefCuratedZone89FD8C717D48112F"
+      }
+     },
+     {
+      "Name": "StorageType",
+      "Value": "StandardStorage"
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "BucketSizeBytes",
+    "Namespace": "AWS/S3",
+    "Period": 21600,
+    "Statistic": "Average",
+    "Threshold": 5000000000
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/CuratedStorageGrowthAlarm/Resource"
+   }
+  },
+  "rawzonecrawlerfailurealarmB475240D": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "DataLakeAlerts11FA3F96"
+     }
+    ],
+    "AlarmDescription": "Alert on raw-zone-crawler failures",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "JobName",
+      "Value": "raw-zone-crawler"
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "glue.driver.aggregate.numFailedTasks",
+    "Namespace": "AWS/Glue",
+    "Period": 300,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/raw-zone-crawler-failure-alarm/Resource"
+   }
+  },
+  "trustedzonecrawlerfailurealarm744891EF": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "DataLakeAlerts11FA3F96"
+     }
+    ],
+    "AlarmDescription": "Alert on trusted-zone-crawler failures",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "JobName",
+      "Value": "trusted-zone-crawler"
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "glue.driver.aggregate.numFailedTasks",
+    "Namespace": "AWS/Glue",
+    "Period": 300,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/trusted-zone-crawler-failure-alarm/Resource"
+   }
+  },
+  "curatedzonecrawlerfailurealarm88A16798": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "DataLakeAlerts11FA3F96"
+     }
+    ],
+    "AlarmDescription": "Alert on curated-zone-crawler failures",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "JobName",
+      "Value": "curated-zone-crawler"
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "glue.driver.aggregate.numFailedTasks",
+    "Namespace": "AWS/Glue",
+    "Period": 300,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/curated-zone-crawler-failure-alarm/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/0XJwQrCMBAE0G/pPV2tiuBR6gdI9S7bJJK1bVayKUVC/l1SD57mzcwOmuMBmgoXqbUZ6pF6SLeIelC4yCOJF0h3fpNW7dOvyEqPPJsFo3aQLiiuZwym/P9yHjFMZVqRc2FnheegbXHL3lAk9lldP9Gx3+yh2cKpeglRHWYfabLQ/fIL1iozcqUAAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "RetailDataLakeMonitoring/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

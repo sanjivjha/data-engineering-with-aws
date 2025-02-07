@@ -1,0 +1,352 @@
+{
+  "version": "38.0.1",
+  "artifacts": {
+    "RetailDataLakeStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RetailDataLakeStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RetailDataLakeStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "RetailDataLakeStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "notificationArns": [],
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/625a1604f0fe8ec758291329a663e6b8726d1b802089fe1f27a48337a6180bd2.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RetailDataLakeStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RetailDataLakeStack.assets"
+      ],
+      "metadata": {
+        "/RetailDataLakeStack/DataLakeKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DataLakeKey37130A3E"
+          }
+        ],
+        "/RetailDataLakeStack/DataLakeKey/Alias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DataLakeKeyAlias53F9A68D"
+          }
+        ],
+        "/RetailDataLakeStack/RawZone/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RawZone2D660746"
+          }
+        ],
+        "/RetailDataLakeStack/TrustedZone/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TrustedZone45D5B023"
+          }
+        ],
+        "/RetailDataLakeStack/CuratedZone/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CuratedZone89FD8C71"
+          }
+        ],
+        "/RetailDataLakeStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RetailDataLakeStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/RetailDataLakeStack/Exports/Output{\"Fn::GetAtt\":[\"RawZone2D660746\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttRawZone2D660746ArnD67825B6"
+          }
+        ],
+        "/RetailDataLakeStack/Exports/Output{\"Fn::GetAtt\":[\"TrustedZone45D5B023\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttTrustedZone45D5B023ArnBBF2646C"
+          }
+        ],
+        "/RetailDataLakeStack/Exports/Output{\"Fn::GetAtt\":[\"CuratedZone89FD8C71\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttCuratedZone89FD8C71ArnC6F8D1E3"
+          }
+        ],
+        "/RetailDataLakeStack/Exports/Output{\"Fn::GetAtt\":[\"DataLakeKey37130A3E\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttDataLakeKey37130A3EArn565CC05E"
+          }
+        ],
+        "/RetailDataLakeStack/Exports/Output{\"Ref\":\"RawZone2D660746\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefRawZone2D660746DB53C4C1"
+          }
+        ],
+        "/RetailDataLakeStack/Exports/Output{\"Ref\":\"TrustedZone45D5B023\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefTrustedZone45D5B0230D67C919"
+          }
+        ],
+        "/RetailDataLakeStack/Exports/Output{\"Ref\":\"CuratedZone89FD8C71\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefCuratedZone89FD8C717D48112F"
+          }
+        ],
+        "/RetailDataLakeStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RetailDataLakeStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RetailDataLakeStack"
+    },
+    "RetailDataLakeCatalog.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RetailDataLakeCatalog.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RetailDataLakeCatalog": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "RetailDataLakeCatalog.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "notificationArns": [],
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/152301583ba197c13380aec63571a9c3c6bb0795635c6ae230ddc80b300e4078.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RetailDataLakeCatalog.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RetailDataLakeStack",
+        "RetailDataLakeCatalog.assets"
+      ],
+      "metadata": {
+        "/RetailDataLakeCatalog/RetailDataLakeDB": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RetailDataLakeDB"
+          }
+        ],
+        "/RetailDataLakeCatalog/GlueCrawlerRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueCrawlerRole4AA4B387"
+          }
+        ],
+        "/RetailDataLakeCatalog/GlueCrawlerRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GlueCrawlerRoleDefaultPolicy44958AC9"
+          }
+        ],
+        "/RetailDataLakeCatalog/RawZoneCrawler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RawZoneCrawler"
+          }
+        ],
+        "/RetailDataLakeCatalog/TrustedZoneCrawler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TrustedZoneCrawler"
+          }
+        ],
+        "/RetailDataLakeCatalog/CuratedZoneCrawler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CuratedZoneCrawler"
+          }
+        ],
+        "/RetailDataLakeCatalog/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RetailDataLakeCatalog/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/RetailDataLakeCatalog/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RetailDataLakeCatalog/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RetailDataLakeCatalog"
+    },
+    "RetailDataLakeMonitoring.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RetailDataLakeMonitoring.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RetailDataLakeMonitoring": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "RetailDataLakeMonitoring.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "notificationArns": [],
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f9c11906b0221d8c9e3b59616b0692f139d8e3d6ae294ee3df299141ed0f2e3a.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RetailDataLakeMonitoring.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RetailDataLakeStack",
+        "RetailDataLakeMonitoring.assets"
+      ],
+      "metadata": {
+        "/RetailDataLakeMonitoring/DataLakeAlerts/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DataLakeAlerts11FA3F96"
+          }
+        ],
+        "/RetailDataLakeMonitoring/DataLakeDashboard/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DataLakeDashboard0CA32ADD"
+          }
+        ],
+        "/RetailDataLakeMonitoring/RawStorageGrowthAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RawStorageGrowthAlarm847DEC72"
+          }
+        ],
+        "/RetailDataLakeMonitoring/TrustedStorageGrowthAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TrustedStorageGrowthAlarm612C19EE"
+          }
+        ],
+        "/RetailDataLakeMonitoring/CuratedStorageGrowthAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CuratedStorageGrowthAlarm43C5B8B8"
+          }
+        ],
+        "/RetailDataLakeMonitoring/raw-zone-crawler-failure-alarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rawzonecrawlerfailurealarmB475240D"
+          }
+        ],
+        "/RetailDataLakeMonitoring/trusted-zone-crawler-failure-alarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "trustedzonecrawlerfailurealarm744891EF"
+          }
+        ],
+        "/RetailDataLakeMonitoring/curated-zone-crawler-failure-alarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "curatedzonecrawlerfailurealarm88A16798"
+          }
+        ],
+        "/RetailDataLakeMonitoring/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RetailDataLakeMonitoring/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/RetailDataLakeMonitoring/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RetailDataLakeMonitoring/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RetailDataLakeMonitoring"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
