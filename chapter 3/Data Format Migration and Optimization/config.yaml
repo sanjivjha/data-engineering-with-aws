@@ -1,0 +1,65 @@
+# config/config.yaml
+
+# AWS Configuration
+aws:
+  source_bucket: retail-format-demo-source
+  target_bucket: retail-format-demo-target
+  region: us-east-1
+
+# Data Generation Settings
+data_generation:
+  transactions:
+    num_records: 1000000  # 1M records
+    date_range:
+      start: "2023-01-01"
+      end: "2023-12-31"
+    file_format: csv
+    
+  customers:
+    num_records: 100000   # 100K records
+    file_format: json
+    
+  inventory:
+    num_records: 50000    # 50K records
+    file_format: parquet
+
+# Migration Settings
+migration:
+  target_formats:
+    transactions: delta
+    customers: parquet
+    inventory: parquet
+  
+  partitioning:
+    transactions:
+      - column: date
+        granularity: month
+    customers:
+      - column: country
+    inventory:
+      - column: category
+
+# Performance Testing
+performance:
+  benchmark_queries:
+    - name: "Daily Sales"
+      query: """
+        SELECT date_trunc('day', timestamp) as date,
+               sum(amount) as daily_total
+        FROM transactions
+        GROUP BY date_trunc('day', timestamp)
+      """
+    - name: "Customer Segments"
+      query: """
+        SELECT c.segment,
+               count(*) as transaction_count,
+               sum(t.amount) as total_amount
+        FROM transactions t
+        JOIN customers c ON t.customer_id = c.customer_id
+        GROUP BY c.segment
+      """
+
+# Logging Configuration
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
