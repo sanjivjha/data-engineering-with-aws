@@ -1,7 +1,9 @@
 **Overview**
 
 This repository contains a complete implementation of the data format migration and optimization concepts discussed in Chapter 3 of "Modern Data Engineering on AWS". The code demonstrates practical techniques for migrating data between formats, optimizing storage, and measuring performance improvements.
-**Project Structure **
+
+**Project Structure**
+
 retail-format-migration/
 ├── notebooks/
 │   └── format_migration_demo.ipynb    # Main implementation notebook
