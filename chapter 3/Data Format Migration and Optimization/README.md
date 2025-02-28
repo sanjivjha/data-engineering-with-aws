@@ -4,30 +4,30 @@ This repository contains a complete implementation of the data format migration 
 
 **Project Structure**
 
-retail-format-migration/
-├── notebooks/
-│   └── format_migration_demo.ipynb    # Main implementation notebook
-├── src/
-│   └── utils.py                       # Helper functions
-├── config/
-│   └── config.yaml                    # Configuration parameters
-├── requirements.txt
-└── README.md
+  retail-format-migration/
+  ├── notebooks/
+  │   └── format_migration_demo.ipynb    # Main implementation notebook
+  ├── src/
+  │   └── utils.py                       # Helper functions
+  ├── config/
+  │   └── config.yaml                    # Configuration parameters
+  ├── requirements.txt
+  └── README.md
 
 **Features**
 
-Generate realistic retail transaction and customer data
-Analyze storage patterns and performance metrics
-Migrate data between formats (CSV/JSON → Parquet/Delta)
-Implement optimized partitioning strategies
-Benchmark performance improvements
-Visualize optimization results
+  Generate realistic retail transaction and customer data
+  Analyze storage patterns and performance metrics
+  Migrate data between formats (CSV/JSON → Parquet/Delta)
+  Implement optimized partitioning strategies
+  Benchmark performance improvements
+  Visualize optimization results
 
 **Requirements**
 
-Python 3.8+
-AWS Account with S3 access
-Spark 3.2+ (for Delta Lake operations)
+  Python 3.8+
+  AWS Account with S3 access
+  Spark 3.2+ (for Delta Lake operations)
 
 **Installation**
 
@@ -71,9 +71,12 @@ When running this demo, you can expect to see:
 
 **Troubleshooting**
 
-Permission errors: Ensure your AWS credentials have proper S3 access
-Memory issues: Reduce data generation volume in config.yaml
-Delta Lake errors: Verify Spark is configured with Delta Lake support
+Permission errors: 
+  Ensure your AWS credentials have proper S3 access
+Memory issues: 
+  Reduce data generation volume in config.yaml
+Delta Lake errors: 
+Verify Spark is configured with Delta Lake support
 
 **License**
 
