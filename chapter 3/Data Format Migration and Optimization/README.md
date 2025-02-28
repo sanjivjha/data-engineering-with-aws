@@ -46,6 +46,7 @@ Configure AWS credentials:
   AWS_DEFAULT_REGION=your_region
 
 **Usage**
+
 Launch Jupyter Notebook:
   jupyter notebook notebooks/format_migration_demo.ipynb
 
@@ -58,6 +59,7 @@ Follow the step-by-step instructions in the notebook to:
   Visualize results
 
 **Performance Expectations**
+
 When running this demo, you can expect to see:
 
 30-40% reduction in storage requirements
