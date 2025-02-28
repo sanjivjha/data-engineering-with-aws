@@ -34,11 +34,14 @@ Spark 3.2+ (for Delta Lake operations)
 Clone the repository:
   git clone https://github.com/data-engineering-book/retail-format-migration
   cd retail-format-migration
+  
 Create a virtual environment:
   python -m venv .venv
   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+  
 Install dependencies:
   pip install -r requirements.txt
+  
 Configure AWS credentials:
   Create a .env file with:
   AWS_ACCESS_KEY_ID=your_key_here
@@ -62,9 +65,9 @@ Follow the step-by-step instructions in the notebook to:
 
 When running this demo, you can expect to see:
 
-30-40% reduction in storage requirements
-40-60% improvement in query performance
-Clear visualization of optimization benefits
+  30-40% reduction in storage requirements
+  40-60% improvement in query performance
+  Clear visualization of optimization benefits
 
 **Troubleshooting**
 
@@ -73,4 +76,5 @@ Memory issues: Reduce data generation volume in config.yaml
 Delta Lake errors: Verify Spark is configured with Delta Lake support
 
 **License**
+
 MIT License
