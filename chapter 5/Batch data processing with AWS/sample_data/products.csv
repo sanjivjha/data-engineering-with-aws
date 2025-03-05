@@ -1,0 +1,4 @@
+product_id,product_name,category,price,margin
+PROD123,Basic T-Shirt,Apparel,14.99,0.40
+PROD456,Premium Jeans,Apparel,49.99,0.35
+PROD789,Casual Socks,Accessories,19.99,0.50
