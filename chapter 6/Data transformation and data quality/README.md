@@ -1,12 +1,10 @@
-# Data Quality Pipeline with AWS CDK
+# Data Quality Pipeline 
 
 This repository contains a Jupyter notebook implementation of a serverless data quality pipeline using AWS CDK with Python. The implementation is part of the examples for Chapter 6 (Data Transformation and Quality) of the book "Data Engineering with AWS".
 
 ## Overview
 
 The serverless data quality pipeline automatically validates data files as they arrive in S3, separates valid and invalid records, publishes quality metrics to CloudWatch, and sends alerts when quality thresholds aren't met.
-
-![Pipeline Architecture](images/quality-pipeline-architecture.png)
 
 Key components:
 - S3 buckets for raw and validated data
