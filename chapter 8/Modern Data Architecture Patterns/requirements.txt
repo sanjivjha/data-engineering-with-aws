@@ -1,0 +1,22 @@
+# requirements.txt for Data Mesh Implementation Workshop
+
+# AWS SDK for Python
+boto3>=1.26.0
+
+# Data manipulation
+pandas>=1.3.0
+
+# Jupyter environment
+jupyter>=1.0.0
+notebook>=6.4.0
+
+# Optional visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# AWS CDK (if using the CDK implementation approach)
+aws-cdk-lib>=2.50.0
+constructs>=10.1.0
+
+# Helper utilities
+ipython>=8.0.0
